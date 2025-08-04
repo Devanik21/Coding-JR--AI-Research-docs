@@ -31,10 +31,9 @@ LICENSE                 # License information
 
 ## Links & Resources
 
-* **Final Project Demo:** \[link-here]
-* **Research Docs (PDF):** \[link-here]
-* **Live Notebook:** \[link-here]
-* **Presentation Slides:** \[link-here]
+* **Final Project Demo:** \[https://c3jrff8z92luwocckaafp4.streamlit.app/]
+
+
 
 ## How to Use
 
