@@ -171,7 +171,14 @@ $$ \mathcal{L}_{\text{total}} = \mathcal{L}_{\text{task}} + \lambda \sum_{k \geq
 Where $(b, d)$ represents the **birth** and **death** coordinates of a feature in the persistence diagram.
 
 
-**Why it matters.** The topology of the embedding space directly determines ANN behavior. A topologically coherent manifold — well-separated clusters, concept-compact regions — improves top-$k$ recall at every $k$ without modifying the retrieval algorithm.
+### Why it Matters: Embedding Topology
+
+The topology of the embedding space directly determines ANN behavior. A topologically coherent manifold—characterized by well-separated clusters and concept-compact regions—improves **top-$k$ recall** at every $k$ without modifying the retrieval algorithm:
+
+$$ \text{Recall}@k = \mathbb{P} \left( y \in \{ \text{top-}k \text{ neighbors of } q \} \right) $$
+
+By minimizing the persistent homology loss $\mathcal{L}_{\text{topo}}$, we enforce **semantic grounding**, ensuring that the distance metric $d(x, y)$ reflects true categorical boundaries rather than high-dimensional noise.
+
 
 **Open questions.** Exact persistent homology is $O(n^3)$; batched approximations via Ripser on mini-batch subgraphs are needed. Defining "semantically unrelated" loops requires a grounding criterion — candidate: loops that cross known class or topic boundaries.
 
