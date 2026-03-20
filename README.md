@@ -135,7 +135,19 @@ These are not extensions of existing literature. They are derived by identifying
 
 **The gap.** RAG chunking is syntactic (fixed windows, sentence boundaries) or structural (AST node types). Neither is aligned with what the model uses. A 300-token docstring may be semantically vacuous for a given retrieval task; a 5-line configuration block may be load-bearing. Chunk boundaries are chosen with no model signal.
 
-**The idea.** During a calibration pass over a representative query set, compute the saliency of each token's hidden state with respect to the task loss: $g_i = \|\nabla_{h_i} \mathcal{L}\|_2$. Aggregate by AST node: $G_\text{node} = \frac{1}{|\text{node}|}\sum_{i \in \text{node}} g_i$. Place chunk boundaries at minima of $G$ — the model's own measure of semantic boundary.
+### Saliency-Based Chunking Strategy
+
+**The Idea:**  
+During a calibration pass over a representative query set, we compute the **saliency** of each token's hidden state $h_i$ with respect to the task loss $\mathcal{L}$:
+
+$$ g_i = \| \nabla_{h_i} \mathcal{L} \|_2 $$
+
+We then aggregate these scores by **AST node** to determine local importance:
+
+$$ G_{\text{node}} = \frac{1}{|\text{node}|} \sum_{i \in \text{node}} g_i $$
+
+Chunk boundaries are placed at the **minima** of $G$, identifying the model's own natural boundaries where information density is lowest.
+
 
 **Why it matters.** Chunk boundaries become a learned function of model attention rather than an engineering heuristic. The resulting chunks are units of maximal model-relevant coherence by construction.
 
@@ -147,7 +159,17 @@ These are not extensions of existing literature. They are derived by identifying
 
 **The gap.** Embedding models are trained to place semantically similar objects nearby in $\mathbb{R}^d$, typically via contrastive loss. But the global topology of the learned manifold is uncontrolled: semantically distinct clusters may be entangled, a single concept may fragment into disconnected regions, and ANN retrieval — which operates on local distance — is blind to this global structure.
 
-**The idea.** Apply persistent homology as a training regularizer. Construct the Vietoris-Rips filtration over a mini-batch embedding and compute persistence diagrams $\text{PD}_k$ for homological features at each dimension $k$ (connected components at $k=0$, loops at $k=1$, voids at $k=2$). Add a loss term $\lambda \cdot \mathcal{L}_\text{topo}$ penalizing long-lived $k \geq 1$ features that span semantically unrelated regions — topological noise without semantic grounding.
+### Topological Regularization Strategy
+
+**The Idea:**  
+Apply **persistent homology** as a training regularizer. We construct the **Vietoris-Rips filtration** over a mini-batch of embeddings and compute persistence diagrams $\text{PD}_k$ for homological features at each dimension $k$ (connected components at $k=0$, loops at $k=1$, voids at $k=2$). 
+
+We add a loss term $\lambda \cdot \mathcal{L}_{\text{topo}}$ penalizing long-lived $k \geq 1$ features that span semantically unrelated regions—topological noise without semantic grounding:
+
+$$ \mathcal{L}_{\text{total}} = \mathcal{L}_{\text{task}} + \lambda \sum_{k \geq 1} \sum_{(b, d) \in \text{PD}_k} (d - b)^p $$
+
+Where $(b, d)$ represents the **birth** and **death** coordinates of a feature in the persistence diagram.
+
 
 **Why it matters.** The topology of the embedding space directly determines ANN behavior. A topologically coherent manifold — well-separated clusters, concept-compact regions — improves top-$k$ recall at every $k$ without modifying the retrieval algorithm.
 
@@ -159,7 +181,21 @@ These are not extensions of existing literature. They are derived by identifying
 
 **The gap.** LoRA applies a uniform rank $r$ to all weight matrices. But attention query-key matrices in early layers, which perform broad syntactic matching, have structurally different intrinsic dimensionality than value-output matrices in later layers, which perform semantic composition. Uniform rank is a category error.
 
-**The idea.** Before fine-tuning, compute $W_0 = U\Sigma V^\top$ for each weight matrix. Effective rank: $r^* = \arg\min_r \|\Sigma - \Sigma_r\|_F / \|\Sigma\|_F < \epsilon$. Also compute per-matrix gradient sensitivity $s_l = \|\nabla_{W_0^{(l)}} \mathcal{L}\|_F$ over a calibration batch. Allocate rank budget proportionally: $r_l \propto s_l$, subject to global budget $\sum_l r_l = R_\text{total}$.
+### Proportional Rank Allocation Strategy
+
+**The Idea:**  
+Before fine-tuning, perform SVD on each weight matrix $W_0 = U\Sigma V^\top$. We determine the initial effective rank $r^*$ by finding the minimum rank $r$ that satisfies a relative reconstruction error $\epsilon$:
+
+$$ r^* = \arg\min_r \frac{\|\Sigma - \Sigma_r\|_F}{\|\Sigma\|_F} < \epsilon $$
+
+Next, we compute the **gradient sensitivity** $s_l$ for each layer $l$ using a calibration batch $\mathcal{D}$:
+
+$$ s_l = \| \nabla_{W_0^{(l)}} \mathcal{L} \|_F $$
+
+Finally, the rank budget $r_l$ for each layer is allocated **proportionally** to its sensitivity $s_l$, constrained by the global budget $R_{\text{total}}$:
+
+$$ r_l \propto s_l \quad \text{subject to} \quad \sum_l r_l = R_{\text{total}} $$
+
 
 **Why it matters.** Under a fixed parameter budget, ARAS concentrates expressiveness where the task gradient is largest. High-sensitivity matrices receive high rank; already-aligned matrices receive near-zero rank. Better per-parameter fine-tuning efficiency with no increase in total trainable parameters.
 
