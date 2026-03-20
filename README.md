@@ -1,164 +1,93 @@
-# Coding Jr AI Research Docs
+# Coding Jr — AI Research Docs
 
-![Language](https://img.shields.io/badge/Language-Python-3776AB?style=flat-square) ![Stars](https://img.shields.io/github/stars/Devanik21/Coding-JR--AI-Research-docs?style=flat-square&color=yellow) ![Forks](https://img.shields.io/github/forks/Devanik21/Coding-JR--AI-Research-docs?style=flat-square&color=blue) ![Author](https://img.shields.io/badge/Author-Devanik21-black?style=flat-square&logo=github) ![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)
+![Author](https://img.shields.io/badge/Author-Devanik21-black?style=flat-square&logo=github)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)
+![Stars](https://img.shields.io/github/stars/Devanik21/Coding-JR--AI-Research-docs?style=flat-square&color=yellow)
+![Forks](https://img.shields.io/github/forks/Devanik21/Coding-JR--AI-Research-docs?style=flat-square&color=blue)
+![License](https://img.shields.io/badge/License-MIT-purple?style=flat-square)
 
-> Coding Jr AI Research Docs — applying computational intelligence to a domain-specific scientific or engineering challenge.
+> A curated collection of deep-dive research documents on the mathematics, mechanics, and engineering of Large Language Models — written for developers who want more than surface-level intuition.
+
+**Topics:** `llm` · `fine-tuning` · `rag` · `vector-embeddings` · `prompt-compression` · `transformer-architecture` · `generative-ai` · `nlp` · `research-notes`
 
 ---
-
-**Topics:** `machine-learning` · `deep-learning` · `neural-networks` · `education` · `generative-ai` · `nlp` · `python` · `research` · `study-notes` · `ai-research-documentation`
 
 ## Overview
 
-Coding Jr AI Research Docs is a domain-specific computational project that combines machine learning, data analysis, or scientific simulation with domain expertise to address a real problem in science or engineering. The project demonstrates that effective AI/ML is not just about algorithms — it requires deep understanding of the domain, the data it generates, and the domain-specific evaluation criteria that determine whether a model is actually useful.
+This repository is a focused, technically detailed knowledge base covering five interconnected areas in modern LLM engineering. Each document goes beyond introductory explanations — the goal is to give the reader a working mental model grounded in mathematics, architecture, and practical tradeoffs.
 
-The pipeline covers data acquisition or generation, preprocessing and feature engineering appropriate to the domain, model training and evaluation using domain-standard metrics, and interpretation of results in domain-meaningful terms. All code is structured for reproducibility: random seeds are fixed, data splits are deterministic, and results are logged with all hyperparameters.
-
-Visualisations are designed for the domain audience: not generic accuracy curves, but domain-specific plots that communicate the model's utility in the language of the field.
+The documents emerged from a structured research and study process (Week 2 of a coding/AI curriculum), but are written to stand alone as reference material for anyone working in or studying applied AI.
 
 ---
 
-## Motivation
+## Document Index
 
-Domain-specific AI applications have higher impact than generic benchmark performance. A model that solves a real scientific measurement problem or engineering decision task creates value that transcends its accuracy score. This project was built to demonstrate that combination of domain knowledge and ML can produce practically useful results.
+### 1. Understanding and Improving LLMs for Coding Tasks
+An introduction to the Transformer architecture — from the original *Attention is All You Need* (Vaswani et al., 2017) — through tokenization, embedding spaces, and the encoder/decoder distinction (BERT vs. GPT families). Covers how LLMs are adapted for programming languages and the tooling landscape (Copilot, Codex, CodeWhisperer, Gemini).
 
----
+### 2. Fitting Large Codebases into LLMs: A Comprehensive Deep Dive
+Addresses the core tension between finite context windows (measured in tokens, typically $n \in [10^4, 10^6]$) and the scale of real-world codebases (millions of lines, thousands of interdependent files). Explores chunking strategies, dependency-aware retrieval, and architectural patterns that allow LLMs to reason about code that vastly exceeds their context budget.
 
-## Architecture
+### 3. How Fine-Tuning Works in LLMs: A Deep Dive into Different Approaches
+A systematic survey of 20+ fine-tuning methods, organized from full fine-tuning (all parameters $\theta$ updated, maximum expressiveness, maximum compute) through parameter-efficient methods. Covers Supervised Fine-Tuning (SFT), RLHF, LoRA, QLoRA, prefix tuning, prompt tuning, and adapter layers — with discussion of when each approach is appropriate and what it trades off.
 
-```
-Domain Data Input
-        │
-  Domain-specific preprocessing
-        │
-  ML / Computational Model
-        │
-  Domain-specific evaluation
-        │
-  Interpretable output + visualisation
-```
+### 4. Retrieval Augmented Generation (RAG) in Generative AI
+Explains why retrieval is a principled solution to hallucination, knowledge cut-offs, and niche-domain gaps. Walks through the full RAG pipeline: query encoding → ANN search over a vector store → context injection → grounded generation. Suitable as both a conceptual introduction and a technical reference.
 
----
+### 5. Vectorized Memory in Large Language Models: A Comprehensive Analysis
+The most mathematically rigorous document in the collection. Covers dense vector embeddings, similarity metrics (cosine similarity, dot product, Euclidean distance), and approximate nearest-neighbour (ANN) algorithms (HNSW, IVF, FAISS). Frames vectorized memory as a solution to the static-knowledge and context-window limitations inherent in pre-trained LLMs.
 
-## Features
-
-### Domain-Specific Data Pipeline
-Data loading, cleaning, and preprocessing tailored to the specific format and conventions of the domain dataset.
-
-### Feature Engineering
-Domain-informed feature construction that encodes relevant physical, biological, or engineering prior knowledge.
-
-### ML Model
-Trained predictive or classification model with domain-appropriate evaluation metrics.
-
-### Domain Visualisations
-Result visualisations that communicate findings in the language of the domain, not just generic ML plots.
-
-### Reproducibility
-Fixed seeds, deterministic data splits, and logged hyperparameters for reproducible results.
-
-### Batch Processing
-Command-line batch mode for processing multiple domain data samples.
-
-### Export
-Results exportable in domain-standard formats for use in further analysis tools.
-
-### Documentation
-Inline code documentation explaining the domain context for each processing step.
+### 6. Text-to-Prompt Compression in LLMs
+Examines prompt compression as an efficiency lever — reducing token count (and therefore cost and latency) while preserving semantic content. Covers the four core benefits: cost reduction, context extension, faster inference, and improved signal-to-noise ratio. Structured as a technical explainer / presentation script.
 
 ---
 
-## Tech Stack
+## Mathematical Themes
 
-| Library / Tool | Role | Why This Choice |
-|---|---|---|
-| **Python** | Primary language | Scientific Python ecosystem |
-| **NumPy / SciPy** | Numerical computing | Array operations, scientific functions |
-| **pandas** | Data management | Tabular data handling |
-| **Matplotlib / Plotly** | Visualisation | Domain-specific plots |
-| **scikit-learn / PyTorch** | ML model | Classification or regression |
+Several formal ideas recur across documents and are worth naming explicitly:
 
----
-
-## Getting Started
-
-### Prerequisites
-
-- Python 3.9+ (or Node.js 18+ for TypeScript/JS projects)
-- `pip` or `npm` package manager
-- Relevant API keys (see Configuration section)
-
-### Installation
-
-```bash
-git clone https://github.com/Devanik21/Coding-JR--AI-Research-docs.git
-cd Coding-JR--AI-Research-docs
-pip install -r requirements.txt
-python main.py
-```
+- **Context window constraint:** $|\text{tokens}(x)| \leq C$, where $C$ is the model's maximum context length. The entire field of RAG, compression, and codebase-fitting exists to navigate this constraint.
+- **Embedding function:** $f: \mathcal{X} \to \mathbb{R}^d$, mapping discrete tokens or documents into a continuous vector space where geometric proximity encodes semantic similarity.
+- **Cosine similarity:** $\text{sim}(u, v) = \frac{u \cdot v}{\|u\| \|v\|}$, the standard retrieval metric for comparing query and document embeddings.
+- **Fine-tuning objective:** $\min_{\theta'} \mathcal{L}(\theta_{\text{pretrained}} + \Delta\theta)$ — updating a small parameter delta $\Delta\theta$ rather than the full weight matrix, as in LoRA.
 
 ---
 
-## Usage
-
-```bash
-python main.py --input data.csv --output results/
-
-# Or launch interactive interface
-streamlit run app.py
-```
-
----
-
-## Configuration
-
-| Variable | Default | Description |
-|---|---|---|
-| `INPUT_PATH` | `data/` | Input data directory |
-| `OUTPUT_PATH` | `results/` | Output directory for results |
-| `MODEL_PATH` | `model.pkl` | Trained model path |
-
-> Copy `.env.example` to `.env` and populate all required values before running.
-
----
-
-## Project Structure
+## Repository Structure
 
 ```
 Coding-JR--AI-Research-docs/
 ├── README.md
-└── ...
+├── LICENSE
+├── Fitting Large Codebases into LLMs_ A Comprehensive Deep Dive.docx
+├── How Fine-Tuning Works in LLMs_ A Deep Dive into different Approaches.docx
+├── Retrieval Augmented Generation (RAG) in Generative AI_ A Simple Guide.docx
+├── Text-to-Prompt Compression in LLMs_ Explanation.docx
+├── Vectorized Memory in Large Language Models_ A Comprehensive Analysis.docx
+└── Week 2 _ Understanding and Improving Large Language Models (LLMs) for Coding Tasks.docx
 ```
+
+---
+
+## Who This Is For
+
+These docs are best suited for:
+
+- **Developers** building LLM-powered applications who want to understand what's happening under the hood.
+- **Students** in AI/ML programmes looking for well-structured reference material beyond lecture slides.
+- **Researchers** who want a concise survey of a topic before going deeper into primary literature.
+
+Some familiarity with linear algebra and basic ML concepts (loss functions, gradient descent, neural network layers) is assumed, particularly for the vectorized memory and fine-tuning documents.
 
 ---
 
 ## Roadmap
 
-- [ ] Integration with domain-specific data APIs for live data ingestion
-- [ ] Advanced model architectures (GNN, Transformer) for complex domain data
-- [ ] Uncertainty quantification for domain-critical predictions
-- [ ] Collaborative annotation interface for domain expert feedback
-- [ ] Publication-ready figure generation for research reports
-
----
-
-## Contributing
-
-Contributions, issues, and feature requests are welcome. Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m 'feat: add your feature'`)
-4. Push to your branch (`git push origin feature/your-feature`)
-5. Open a Pull Request
-
-Please follow conventional commit messages and ensure any new code is documented.
-
----
-
-## Notes
-
-Domain expertise is required to correctly interpret and use these results. Please consult relevant literature and domain experts before applying outputs to real-world decisions.
+- [ ] Add mathematical appendix consolidating notation across all documents
+- [ ] Supplement each doc with a code walkthrough (Python / Jupyter)
+- [ ] Expand the RAG guide with an end-to-end implementation using LangChain or LlamaIndex
+- [ ] Add a comparative study of ANN libraries: FAISS vs. Chroma vs. Pinecone vs. Weaviate
+- [ ] Convert select documents to interactive notebooks
 
 ---
 
@@ -175,8 +104,8 @@ National Institute of Technology Agartala
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE).
+Open source under the [MIT License](LICENSE).
 
 ---
 
-*Crafted with curiosity, precision, and a belief that good software is worth building well.*
+*Built with intellectual curiosity and a conviction that understanding the mathematics makes you a better engineer.*
